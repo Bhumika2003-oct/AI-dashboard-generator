@@ -1,31 +1,34 @@
 import streamlit as st
 from simple_auth import sign_in, sign_up, reset_password
 
+
 def show_login_page():
+   
     st.markdown("""
         <style>
+        html, body, [data-testid="stAppViewContainer"] {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
         body {
             background: linear-gradient(135deg, #FFE5E2, #FFF0F0);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }
         @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .auth-container {
             max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: auto;
+            padding: 30px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
+            border-radius: 12px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px 0 rgba(221, 71, 55, 0.2);
             border: 1px solid rgba(221, 71, 55, 0.2);
@@ -37,6 +40,7 @@ def show_login_page():
             border-radius: 5px;
             color: #DD4737;
             font-weight: bold;
+            font-size: 24px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
         .stTextInput input {
@@ -59,10 +63,16 @@ def show_login_page():
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(221, 71, 55, 0.4);
         }
+        [data-testid="stBlock"] {
+            border: none !important;
+            padding: 0 !important;
+        }
         </style>
     """, unsafe_allow_html=True)
-    
+
+    # Wrap your form in the styled container
     st.markdown('<div class="auth-container">', unsafe_allow_html=True)
+
     st.markdown('<h2 class="auth-title">Login to AI Dashboard Generator</h2>', unsafe_allow_html=True)
     
     with st.form("login_form"):
