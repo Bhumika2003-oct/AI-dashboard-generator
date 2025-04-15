@@ -47,7 +47,7 @@ def call_llm(user_query, df):
 
 
 # Streamlit UI to upload a file and enter a query
-st.title("AI Dashboard Generator with Azure OpenAI")
+
 
 uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
 user_query = st.text_input("What would you like to see or know from this data?")
