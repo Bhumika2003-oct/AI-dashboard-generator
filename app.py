@@ -13,6 +13,56 @@ from custom_css import get_custom_css
 
 # Load environment variables
 load_dotenv()
+ Set up Azure OpenAI client
+openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_base = "https://fy26-hackon-q1.openai.azure.com"
+openai.api_version = "2025-01-01-preview"
+
+
+# Define the LLM call function
+def call_llm(user_query, df):
+    # Convert DataFrame to string (you could also use df.describe().to_string() for summary stats)
+    data_string = df.head(10).to_string()
+
+    prompt = f"""
+    Analyze the following data and provide concise insights in bullet points.
+    Focus on:
+    - Key trends
+    - Outliers
+    - Relationships between variables
+    Data:
+    {data_string}
+    """
+
+    try:
+        response = openai.Completion.create(
+            model="RazorHustlers",  # Azure deployment name
+            prompt=prompt,
+            max_tokens=500,
+            temperature=0.7
+        )
+        return response['choices'][0]['text'].strip()  # Updated to use 'text' field for the response
+    except Exception as e:
+        return f"Error generating insights: {str(e)}"
+
+
+# Streamlit UI to upload a file and enter a query
+st.title("AI Dashboard Generator with Azure OpenAI")
+
+uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+user_query = st.text_input("What would you like to see or know from this data?")
+
+if uploaded_file is not None and user_query:
+    df = pd.read_csv(uploaded_file)
+    st.subheader("Preview of Uploaded Data")
+    st.dataframe(df.head())
+
+    with st.spinner("Generating insights from the data..."):
+        llm_response = call_llm(user_query, df)
+
+    st.subheader("Generated Insights")
+    st.write(llm_response)
+
 
 # Set page config with full width
 st.set_page_config(
